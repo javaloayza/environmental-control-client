@@ -10,7 +10,7 @@ import { MessagesDemo } from './messagesdemo';
 import { MiscDemo } from './miscdemo';
 import { PanelsDemo } from './panelsdemo';
 import { TimelineDemo } from './timelinedemo';
-import { TableDemo } from './tabledemo';
+import { TableDemo } from './tabledemo';  
 import { OverlayDemo } from './overlaydemo';
 import { TreeDemo } from './treedemo';
 import { MenuDemo } from './menudemo';

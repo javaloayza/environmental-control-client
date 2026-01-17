@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { AppLayout } from './layout/component/app.layout';
 import { Dashboard } from './pages/dashboard/dashboard';
+import { COMPANY_STRING_ROUTES } from './company/constants/company-routes';
 
 export const APP_ROUTES: Routes = [
   {
@@ -18,9 +19,14 @@ export const APP_ROUTES: Routes = [
       {
         path: 'pages',
         loadChildren: () => import('./pages/pages.routes').then(m => m.default)
-      }
+      },
+      {
+        path: COMPANY_STRING_ROUTES.ROOT,
+        loadChildren: () => import('./company/company.routes').then(m => m.COMPANY_ROUTES)
+      },
     ]
   },
+
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.routes').then(m => m.AUTH_ROUTES)

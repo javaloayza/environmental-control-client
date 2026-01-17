@@ -1,0 +1,46 @@
+<div class="card">
+  <div class="font-semibold text-xl">Companies</div>
+  <div class="flex justify-between my-2">
+    <div class="table-filters">
+      <p-iconfield>
+          <p-inputicon class="pi pi-search" />
+          <input type="text" pInputText placeholder="Search by Name" />
+      </p-iconfield>
+    </div>
+    <div class="flex justify-end">
+    </div>
+    <p-button icon="fas fa-plus" label="Create Company" (onClick)="companyForm.showModal()" ></p-button>
+  </div>
+  <p-table
+    [value]="companies()"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[5, 10, 20]"
+  >
+      <ng-template pTemplate="header">
+          <tr>
+              <th>#</th>
+              <th >NAME</th>
+              <th class="capitalize">RUC</th>
+              <th class="capitalize">COUNTRY</th>
+              <th class="capitalize">ACTIONS</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-company>
+          <tr>
+              <td>{{ company.id }}</td>
+              <td>{{ company.name }}</td>
+              <td>{{ company.ruc }}</td>
+              <td>{{ company.countryName }}</td>
+              <td>
+                <div class="flex gap-2">
+                  <p-button severity="secondary" rounded="true" icon="fas fa-pencil" (onClick)="companyForm.showModal()"></p-button>
+                  <p-button severity="secondary" rounded="true" icon="fas fa-trash"></p-button>
+                </div>
+              </td>
+          </tr>
+      </ng-template>
+  </p-table>
+</div>
+
+<app-modal-company-form #companyForm></app-modal-company-form>

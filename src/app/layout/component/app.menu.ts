@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AppMenuitem } from './app.menuitem';
+import { COMPANY_STRING_ROUTES } from 'app/company/constants';
 
 @Component({
     selector: 'app-menu',
@@ -20,6 +21,10 @@ export class AppMenu {
 
     ngOnInit() {
         this.model = [
+            {
+                label: 'Modules',
+                items: [{ label: 'Companies', icon: 'pi pi-fw pi-home', routerLink: [COMPANY_STRING_ROUTES.ROOT] }]
+            },
             {
                 label: 'Home',
                 items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
