@@ -7,12 +7,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { ModalCompanyFormComponent } from "app/company/components";
 import { NotificationService } from '@core/services';
+import { CompanyTextPipe } from '@shared/pipes';
 
 @Component({
   selector: 'app-company-list',
   templateUrl: './company-list.component.html',
   styleUrls: ['./company-list.component.scss'],
-  imports: [TableModule, ButtonModule, IconFieldModule, InputIcon, InputTextModule, ModalCompanyFormComponent]
+  imports: [TableModule, ButtonModule, IconFieldModule, InputIcon, InputTextModule, ModalCompanyFormComponent, CompanyTextPipe]
 })
 export class CompanyListComponent implements OnInit {
 

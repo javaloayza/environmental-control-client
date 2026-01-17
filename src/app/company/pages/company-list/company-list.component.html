@@ -1,5 +1,5 @@
 <div class="card">
-  <div class="font-semibold text-xl">Companies</div>
+  <div class="font-semibold text-xl">{{ 'company.title' | ct:'Compañia' }}</div>
   <div class="flex justify-between my-2">
     <div class="table-filters">
       <p-iconfield>
@@ -20,7 +20,7 @@
       <ng-template pTemplate="header">
           <tr>
               <th>#</th>
-              <th >NAME</th>
+              <th >{{ 'company.name' | ct:'Nombre' }}</th>
               <th class="capitalize">RUC</th>
               <th class="capitalize">COUNTRY</th>
               <th class="capitalize">ACTIONS</th>
