@@ -9,7 +9,12 @@
     </div>
     <div class="flex justify-end">
     </div>
-    <p-button icon="fas fa-plus" label="Create Company" (onClick)="companyForm.showModal()" ></p-button>
+    <p-button (onClick)="openCreateModal()" >
+      <div class="flex">
+        <i class="fas fa-plus"></i>
+        <span class="ml-2">{{ 'company.create' | ct:'Crear Compañia' }}</span>
+      </div>
+    </p-button>
   </div>
   <p-table
     [value]="companies()"
@@ -19,23 +24,27 @@
   >
       <ng-template pTemplate="header">
           <tr>
-              <th>#</th>
               <th >{{ 'company.name' | ct:'Nombre' }}</th>
-              <th class="capitalize">RUC</th>
-              <th class="capitalize">COUNTRY</th>
-              <th class="capitalize">ACTIONS</th>
+              <th class="capitalize">{{ 'company.ruc' | ct:'RUC' }}</th>
+              <th class="capitalize">{{ 'company.country' | ct:'Pais' }}</th>
+              <th class="capitalize">{{ 'company.state' | ct:'Departamento' }}</th>
+              <th class="capitalize">{{ 'company.actions' | ct:'Acciones' }}</th>
           </tr>
       </ng-template>
       <ng-template pTemplate="body" let-company>
           <tr>
-              <td>{{ company.id }}</td>
               <td>{{ company.name }}</td>
               <td>{{ company.ruc }}</td>
-              <td>{{ company.countryName }}</td>
+              <td>{{ company.idCountry }}</td>
+              <td>{{ company.idState }}</td>
               <td>
                 <div class="flex gap-2">
-                  <p-button severity="secondary" rounded="true" icon="fas fa-pencil" (onClick)="companyForm.showModal()"></p-button>
+                  <div>
+                  <p-button severity="secondary" rounded="true" icon="fas fa-pencil" (onClick)="openEditModal(company)"></p-button>
+                  </div>
+                  <div>
                   <p-button severity="secondary" rounded="true" icon="fas fa-trash"></p-button>
+                  </div>
                 </div>
               </td>
           </tr>
@@ -43,4 +52,7 @@
   </p-table>
 </div>
 
-<app-modal-company-form #companyForm></app-modal-company-form>
+<app-modal-company-form
+  #companyForm
+  (saved)="onCompanySaved()"
+></app-modal-company-form>

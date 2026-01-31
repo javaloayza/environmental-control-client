@@ -1,4 +1,5 @@
 export const COMPANY_ENDPOINTS = {
-  GET_LIST: '/CompanyController/getCompanies',
-  CREATE: '/CompanyController/createCompany',
+  GET_LIST: 'Company/listCompany',
+  INSERT: 'Company/insertCompany',
+  UPDATE: 'Company/updateCompany',
 };

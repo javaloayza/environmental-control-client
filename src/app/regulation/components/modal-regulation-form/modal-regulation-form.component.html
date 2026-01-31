@@ -1,0 +1,91 @@
+<p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '25rem' }">
+    <ng-template #header>
+        <div class="font-semibold text-xl">
+          @if(mode === 'Create'){
+            {{ 'regulation.create' | ct:'Crear Regulación' }}
+          } @else {
+            {{ 'regulation.update' | ct:'Editar Regulación' }}
+          }
+        </div>
+    </ng-template>
+
+    <form [formGroup]="regulationForm" class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
+            <label for="uidMonitoringType" class="font-semibold">{{ 'regulation.monitoringType' | ct:'Tipo de Monitoreo' }}</label>
+            <p-select
+                id="uidMonitoringType"
+                [options]="monitoringTypes()"
+                formControlName="uidMonitoringType"
+                optionLabel="nameMonitoring"
+                optionValue="uidMonitoringType"
+                placeholder="Seleccione un tipo"
+                class="w-full"
+                [class.ng-invalid]="regulationForm.get('uidMonitoringType')?.invalid && regulationForm.get('uidMonitoringType')?.touched"
+            />
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="code" class="font-semibold">{{ 'regulation.code' | ct:'Código' }}</label>
+            <input
+                pInputText
+                id="code"
+                class="flex-auto"
+                autocomplete="off"
+                formControlName="code"
+                [class.ng-invalid]="regulationForm.get('code')?.invalid && regulationForm.get('code')?.touched"
+            />
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="title" class="font-semibold">{{ 'regulation.title' | ct:'Título' }}</label>
+            <input
+                pInputText
+                id="title"
+                class="flex-auto"
+                autocomplete="off"
+                formControlName="title"
+                [class.ng-invalid]="regulationForm.get('title')?.invalid && regulationForm.get('title')?.touched"
+            />
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="description" class="font-semibold">{{ 'regulation.description' | ct:'Descripción' }}</label>
+            <input
+                pInputText
+                id="description"
+                class="flex-auto"
+                autocomplete="off"
+                formControlName="description"
+                [class.ng-invalid]="regulationForm.get('description')?.invalid && regulationForm.get('description')?.touched"
+            />
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="autority" class="font-semibold">{{ 'regulation.autority' | ct:'Autoridad' }}</label>
+            <input
+                pInputText
+                id="autority"
+                class="flex-auto"
+                autocomplete="off"
+                formControlName="autority"
+                [class.ng-invalid]="regulationForm.get('autority')?.invalid && regulationForm.get('autority')?.touched"
+            />
+        </div>
+    </form>
+
+    <ng-template #footer>
+        <p-button
+            label="Cancel"
+            [text]="true"
+            severity="secondary"
+            (click)="hideModal()"
+        />
+        <p-button
+            label="Save"
+            [outlined]="true"
+            [loading]="loading"
+            [disabled]="!regulationForm.valid || loading"
+            (click)="saveRegulation()"
+        />
+    </ng-template>
+</p-dialog>

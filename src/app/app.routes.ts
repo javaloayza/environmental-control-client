@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AppLayout } from './layout/component/app.layout';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { COMPANY_STRING_ROUTES } from './company/constants/company-routes';
+import { REGULATION_STRING_ROUTES } from './regulation/constants/regulation-routes';
 
 export const APP_ROUTES: Routes = [
   {
@@ -23,6 +24,10 @@ export const APP_ROUTES: Routes = [
       {
         path: COMPANY_STRING_ROUTES.ROOT,
         loadChildren: () => import('./company/company.routes').then(m => m.COMPANY_ROUTES)
+      },
+      {
+        path: REGULATION_STRING_ROUTES.ROOT,
+        loadChildren: () => import('./regulation/regulation.routes').then(m => m.REGULATION_ROUTES)
       },
     ]
   },

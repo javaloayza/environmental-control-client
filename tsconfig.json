@@ -24,9 +24,11 @@
     "module": "ES2022",
     "baseUrl": "./src",
     "paths": {
+      "@app/*": ["app/*"],
       "@core/*": ["app/core/*"],
       "@shared/*": ["app/shared/*"],
       "@features/*": ["app/features/*"],
+      "@company/*": ["app/company/*"],
       "@environments/*": ["environments/*"],
       "@auth/*": ["app/auth/*"]
     },

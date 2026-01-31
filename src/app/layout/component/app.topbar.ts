@@ -1,15 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { StyleClassModule } from 'primeng/styleclass';
+import { SelectModule } from 'primeng/select';
+import { FormsModule } from '@angular/forms';
 import { AppConfigurator } from './app.configurator';
 import { LayoutService } from '../service/layout.service';
+import { CompanyService } from '../../company/services/company.service';
+import { Company } from '../../company/models';
+import { TextPipe } from '@app/shared/pipes';
 
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator],
+    imports: [RouterModule,
+       CommonModule, StyleClassModule, SelectModule,
+       FormsModule, AppConfigurator, TextPipe],
     template: ` <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
             <button class="layout-menu-button layout-topbar-action" (click)="layoutService.onMenuToggle()">
@@ -39,6 +46,14 @@ import { LayoutService } from '../service/layout.service';
 
         <div class="layout-topbar-actions">
             <div class="layout-config-menu">
+                <p-select
+                    [options]="companies"
+                    [(ngModel)]="selectedCompany"
+                    optionLabel="name"
+                    [placeholder]="'company.select.placeholder' | ct:'Seleccionar Compañía'"
+                    (onChange)="onCompanyChange()"
+                    class="w-full md:w-60"
+                ></p-select>
                 <button type="button" class="layout-topbar-action" (click)="toggleDarkMode()">
                     <i [ngClass]="{ 'pi ': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }"></i>
                 </button>
@@ -81,10 +96,36 @@ import { LayoutService } from '../service/layout.service';
         </div>
     </div>`
 })
-export class AppTopbar {
+export class AppTopbar implements OnInit {
     items!: MenuItem[];
+    companies: Company[] = [];
+    selectedCompany: Company | null = null;
 
-    constructor(public layoutService: LayoutService) {}
+    layoutService = inject(LayoutService);
+    companyService = inject(CompanyService);
+
+    ngOnInit(): void {
+        this.loadCompanies();
+    }
+
+    async loadCompanies(): Promise<void> {
+        try {
+            this.companies = await this.companyService.getCompanies();
+            // Seleccionar el primer registro
+            if (this.companies.length > 0) {
+                this.selectedCompany = this.companies[0];
+                this.companyService.setSelectedCompany(this.selectedCompany);
+            }
+        } catch (error) {
+            console.error('Error loading companies:', error);
+        }
+    }
+
+    onCompanyChange(): void {
+        if (this.selectedCompany) {
+            this.companyService.setSelectedCompany(this.selectedCompany);
+        }
+    }
 
     toggleDarkMode() {
         this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));

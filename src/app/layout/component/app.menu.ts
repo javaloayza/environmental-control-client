@@ -23,7 +23,9 @@ export class AppMenu {
         this.model = [
             {
                 label: 'Modules',
-                items: [{ label: 'Companies', icon: 'pi pi-fw pi-home', routerLink: [COMPANY_STRING_ROUTES.ROOT] }]
+                items: [
+                  { label: 'Companies', icon: 'pi pi-fw pi-home', routerLink: [COMPANY_STRING_ROUTES.ROOT] },
+                  { label: 'Regulations', icon: 'pi pi-fw pi-home', routerLink: ['regulations'] }]
             },
             {
                 label: 'Home',

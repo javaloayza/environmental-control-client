@@ -1,11 +1,8 @@
 export interface Company {
-  id: string,
-  name: string,
-  ruc: string,
-  countryId: string,
-  countryName: string,
-  stateId: string,
-  stateName: string,
-  address: string,
-  zipCode: string
+  idCompany:  number;
+  uidCompany: string;
+  name:       string;
+  ruc:        string;
+  idCountry:  number;
+  idState:    number;
 }
