@@ -2,12 +2,14 @@ import { Routes } from '@angular/router';
 import { AppLayout } from './layout/component/app.layout';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { COMPANY_STRING_ROUTES } from './company/constants/company-routes';
+import { JweAuthGuard } from '@core/interceptors/jwe-auth.guard';
 import { REGULATION_STRING_ROUTES } from './regulation/constants/regulation-routes';
 
 export const APP_ROUTES: Routes = [
   {
     path: '',
     component: AppLayout,
+    canActivate: [JweAuthGuard],
     children: [
       {
         path: '',

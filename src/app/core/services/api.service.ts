@@ -16,7 +16,7 @@ export class ApiService {
   private notificationService = inject(NotificationService);
 
   // ⚠️ Global error handler
-  private handleError(error: HttpErrorResponse) {
+  private handleError = (error: HttpErrorResponse) => {
     let message = 'Unknown error occurred';
     if (error.error instanceof ErrorEvent) {
       message = `Client error: ${error.error.message}`;
@@ -28,7 +28,7 @@ export class ApiService {
     console.error('API Error =>', error);
     this.notificationService.error(message);
     return throwError(() => new Error(message));
-  }
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getData<T>(endpoint: string, body?: any): Observable<T> {

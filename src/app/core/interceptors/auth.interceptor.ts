@@ -1,57 +1,60 @@
 import { Injectable, inject } from '@angular/core';
-import {
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-  HttpErrorResponse,
-} from '@angular/common/http';
-import { Observable, from, throwError } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
-import { AuthService } from '@core/services';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
-@Injectable()
+const ENCRYPTED_TOKEN_KEY = 'encrypted_token';
+
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthInterceptor implements HttpInterceptor {
-  private auth = inject(AuthService);
-  private isRefreshing = false;
+  private router = inject(Router);
 
-  intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    return from(this.addAuthHeader(req)).pipe(
-      switchMap(authReq => next.handle(authReq)),
-      catchError(err => this.handleError(err, req, next))
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    return next.handle(this.addTokenToRequest(req)).pipe(
+      catchError((error: HttpErrorResponse) => {
+        // Si es error 401, el token es inválido o expiró
+        if (error.status === 401) {
+          console.warn('Token inválido o expirado (401)');
+          this.handleUnauthorized();
+        }
+        return throwError(() => error);
+      })
     );
   }
 
-  private async addAuthHeader(req: HttpRequest<unknown>): Promise<HttpRequest<unknown>> {
-    const token = await this.auth.getAccessToken();
-    if (!token) return req;
-
-    return req.clone({
-      setHeaders: { Authorization: `Bearer ${token}` },
-    });
-  }
-
-  private handleError(
-    error: any,
-    req: HttpRequest<unknown>,
-    next: HttpHandler
-  ): Observable<HttpEvent<unknown>> {
-    if (error instanceof HttpErrorResponse && error.status === 401 && !this.isRefreshing) {
-      this.isRefreshing = true;
-      return from(this.auth.refreshToken()).pipe(
-        switchMap(() => from(this.addAuthHeader(req)).pipe(switchMap(authReq => next.handle(authReq)))),
-        catchError(refreshErr => {
-          this.isRefreshing = false;
-          this.auth.logout();
-          return throwError(() => refreshErr);
-        }),
-        switchMap(res => {
-          this.isRefreshing = false;
-          return [res];
-        })
-      );
+  /**
+   * Añade el token JWE al header Authorization
+   */
+  private addTokenToRequest(req: HttpRequest<any>): HttpRequest<any> {
+    // Obtener token del localStorage
+    const token = localStorage.getItem(ENCRYPTED_TOKEN_KEY);
+    
+    if (token) {
+      // Clone la request y añade el header Authorization
+      return req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     }
 
-    return throwError(() => error);
+    return req;
+  }
+
+  /**
+   * Maneja errores 401 (Unauthorized)
+   */
+  private handleUnauthorized(): void {
+    // Limpiar tokens
+    localStorage.removeItem(ENCRYPTED_TOKEN_KEY);
+    sessionStorage.removeItem(ENCRYPTED_TOKEN_KEY);
+
+    // Redirigir a login
+    this.router.navigate(['/auth/login'], {
+      queryParams: { returnUrl: this.router.url },
+    });
   }
 }

@@ -2,79 +2,64 @@
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ApiService } from '@core/services/api.service';
-import { SecureStorageService } from '@core/services/secure-storage.service';
 import type { User } from '@auth/models/user';
 
-const ACCESS_TOKEN_KEY = 'access_token';
-const REFRESH_TOKEN_KEY = 'refresh_token';
+const ENCRYPTED_TOKEN_KEY = 'encrypted_token';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private api = inject(ApiService);
-  private secureStorage = inject(SecureStorageService);
   private currentUser: User | null = null;
 
   async login(email: string, password: string): Promise<User> {
-    const apiUrl = `auth/login`;
     const response = await firstValueFrom(
-      this.api.postData<any>(apiUrl, { email, password })
+      this.api.postData<any>('api/v1/auth/login', { email, password })
     );
 
-    await this.secureStorage.setItem(ACCESS_TOKEN_KEY, response.accessToken);
-    await this.secureStorage.setItem(REFRESH_TOKEN_KEY, response.refreshToken);
+    // Guardar token en localStorage
+    localStorage.setItem(ENCRYPTED_TOKEN_KEY, response.token);
 
-    this.currentUser = response.user as User;
+    // Crear objeto usuario a partir de la respuesta
+    this.currentUser = {
+      id: 1,
+      username: response.email?.split('@')[0] || 'user',
+      email: response.email || '',
+      firstName: 'Usuario',
+      lastName: '',
+      role: 'user',
+      status: 'active',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
     return this.currentUser;
   }
 
   async logout(): Promise<void> {
-    const apiUrl = `auth/logout`;
-    await firstValueFrom(this.api.postData(apiUrl, {}));
+    try {
+      await firstValueFrom(this.api.postData('api/v1/auth/logout', {}));
+    } catch (error) {
+      console.warn('Error al desconectar del backend:', error);
+    }
 
-    await this.secureStorage.removeItem(ACCESS_TOKEN_KEY);
-    await this.secureStorage.removeItem(REFRESH_TOKEN_KEY);
-
+    // Limpiar token del storage
+    localStorage.removeItem(ENCRYPTED_TOKEN_KEY);
+    sessionStorage.removeItem(ENCRYPTED_TOKEN_KEY);
     this.currentUser = null;
   }
 
-  async getAccessToken(): Promise<string | null> {
-    return this.secureStorage.getItem<string>(ACCESS_TOKEN_KEY);
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem(ENCRYPTED_TOKEN_KEY);
   }
 
-  async getRefreshToken(): Promise<string | null> {
-    return this.secureStorage.getItem<string>(REFRESH_TOKEN_KEY);
+  getToken(): string | null {
+    return localStorage.getItem(ENCRYPTED_TOKEN_KEY);
   }
 
-  async refreshToken(): Promise<void> {
-    const refreshToken = await this.getRefreshToken();
-    if (!refreshToken) throw new Error('No refresh token found');
-
-    const apiUrl = `auth/refresh`;
-    const response = await firstValueFrom(
-      this.api.postData<any>(apiUrl, { refreshToken })
-    );
-
-    await this.secureStorage.setItem(ACCESS_TOKEN_KEY, response.accessToken);
-    await this.secureStorage.setItem(REFRESH_TOKEN_KEY, response.refreshToken);
-  }
-
-  async getCurrentUser(): Promise<User | null> {
-    if (this.currentUser) return this.currentUser;
-
-    const apiUrl = `auth/me`;
-    try {
-      const response = await firstValueFrom(this.api.getData<User>(apiUrl));
-      this.currentUser = response;
-      return this.currentUser;
-    } catch {
-      return null;
-    }
-  }
-
-  async isAuthenticated(): Promise<boolean> {
-    const token = await this.getAccessToken();
-    return !!token;
+  getCurrentUser(): User | null {
+    return this.currentUser;
   }
 }
