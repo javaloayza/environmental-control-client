@@ -1,0 +1,58 @@
+<div class="card">
+  <div class="font-semibold text-xl">{{ 'regulation.title' | ct:'Regulación' }}</div>
+  <div class="flex justify-between my-2">
+    <div class="table-filters">
+      <p-iconfield>
+          <p-inputicon class="pi pi-search" />
+          <input type="text" pInputText placeholder="Search by Code" />
+      </p-iconfield>
+    </div>
+    <div class="flex justify-end">
+    </div>
+    <p-button (onClick)="openCreateModal()" >
+      <div class="flex">
+        <i class="fas fa-plus"></i>
+        <span class="ml-2">{{ 'regulation.create' | ct:'Crear Regulación' }}</span>
+      </div>
+    </p-button>
+  </div>
+  <p-table
+    [value]="regulations()"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[5, 10, 20]"
+  >
+      <ng-template pTemplate="header">
+          <tr>
+              <th >{{ 'regulation.code' | ct:'Código' }}</th>
+              <th class="capitalize">{{ 'regulation.title' | ct:'Título' }}</th>
+              <th class="capitalize">{{ 'regulation.description' | ct:'Descripción' }}</th>
+              <th class="capitalize">{{ 'regulation.autority' | ct:'Autoridad' }}</th>
+              <th class="capitalize">{{ 'regulation.actions' | ct:'Acciones' }}</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-regulation>
+          <tr>
+              <td>{{ regulation.code }}</td>
+              <td>{{ regulation.title }}</td>
+              <td>{{ regulation.description }}</td>
+              <td>{{ regulation.autority }}</td>
+              <td>
+                <div class="flex gap-2">
+                  <div>
+                  <p-button severity="secondary" rounded="true" icon="fas fa-pencil" (onClick)="openEditModal(regulation)"></p-button>
+                  </div>
+                  <div>
+                  <p-button severity="secondary" rounded="true" icon="fas fa-trash"></p-button>
+                  </div>
+                </div>
+              </td>
+          </tr>
+      </ng-template>
+  </p-table>
+</div>
+
+<app-modal-regulation-form
+  #regulationForm
+  (saved)="onRegulationSaved()"
+></app-modal-regulation-form>

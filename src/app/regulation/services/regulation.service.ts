@@ -1,91 +1,71 @@
-import { Injectable } from '@angular/core';
-import { Regulation, MonitoringType } from '../models';
+/* eslint-disable quotes */
+import { Injectable, inject } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
+import { ApiService } from '@core/services';
+import { Regulation } from '../models';
+import { REGULATION_ENDPOINTS } from '../constants/regulation-endpoints';
+import { CompanyService } from '../../company/services/company.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RegulationService {
-  private regulations: Regulation[] = [
-    {
-      id: '1',
-      uid_regulation: 'REG-001',
-      tipoMonitoreoId: '1',
-      code: 'NOR-001',
-      title: 'Monitoreo de Agua',
-      description: 'Regulación para monitoreo de calidad de agua',
-      companyId: '1',
-      authority: 'MINAM',
-      status: 'active'
-    },
-    {
-      id: '2',
-      uid_regulation: 'REG-002',
-      tipoMonitoreoId: '2',
-      code: 'NOR-002',
-      title: 'Monitoreo de Aire',
-      description: 'Regulación para monitoreo de calidad del aire',
-      companyId: '1',
-      authority: 'OEFA',
-      status: 'active'
-    },
-    {
-      id: '3',
-      uid_regulation: 'REG-003',
-      tipoMonitoreoId: '3',
-      code: 'NOR-003',
-      title: 'Monitoreo de Suelo',
-      description: 'Regulación para monitoreo de contaminación del suelo',
-      companyId: '2',
-      authority: 'MINAM',
-      status: 'active'
-    }
-  ];
+  private api = inject(ApiService);
+  private companyService = inject(CompanyService);
 
-  private monitoringTypes: MonitoringType[] = [
-    {
-      id: '1',
-      uid_monitoring_type: 'MT-001',
-      name_monitoring: 'Agua',
-      description: 'Monitoreo de agua',
-      status: 'active',
-      uid_company: '1'
-    },
-    {
-      id: '2',
-      uid_monitoring_type: 'MT-002',
-      name_monitoring: 'Aire',
-      description: 'Monitoreo de aire',
-      status: 'active',
-      uid_company: '1'
-    },
-    {
-      id: '3',
-      uid_monitoring_type: 'MT-003',
-      name_monitoring: 'Suelo',
-      description: 'Monitoreo de suelo',
-      status: 'active',
-      uid_company: '2'
-    }
-  ];
 
-  getRegulations(): Regulation[] {
-    return [...this.regulations];
+  getRegulations(uidCompany?: string): Promise<Regulation[]> {
+    const apiUrl = REGULATION_ENDPOINTS.GET_LIST;
+    const company = uidCompany || this.companyService.selectedCompany()?.uidCompany;
+
+    if (!company) {
+      throw new Error('No company selected');
+    }
+
+    const body = {
+      "uidCompany": company
+    };
+    return firstValueFrom(this.api.getData<Regulation[]>(apiUrl, body));
   }
 
-  getMonitoringTypes(): MonitoringType[] {
-    return [...this.monitoringTypes];
+  createRegulation(regulation: Partial<Regulation>): Promise<Regulation> {
+    const apiUrl = REGULATION_ENDPOINTS.INSERT;
+    const company = this.companyService.selectedCompany();
+
+    if (!company) {
+      throw new Error('No company selected');
+    }
+
+    const body = {
+      uidMonitoringType: regulation.uidMonitoringType,
+      code: regulation.code,
+      title: regulation.title,
+      description: regulation.description,
+      autority: regulation.autority,
+      uidCompany: company.uidCompany
+    };
+
+    return firstValueFrom(this.api.postData<Regulation>(apiUrl, body));
   }
 
   updateRegulation(regulation: Regulation): Promise<Regulation> {
-    const index = this.regulations.findIndex(r => r.id === regulation.id);
-    if (index > -1) {
-      this.regulations[index] = { ...regulation };
-      return Promise.resolve(this.regulations[index]);
-    }
-    return Promise.reject(new Error('Regulation not found'));
-  }
+    const apiUrl = REGULATION_ENDPOINTS.UPDATE;
+    const company = this.companyService.selectedCompany();
 
-  getRegulationById(id: string): Regulation | undefined {
-    return this.regulations.find(r => r.id === id);
+    if (!company) {
+      throw new Error('No company selected');
+    }
+
+    const body = {
+      uidRegulation: regulation.uidRegulation,
+      uidMonitoringType: regulation.uidMonitoringType,
+      code: regulation.code,
+      title: regulation.title,
+      description: regulation.description,
+      autority: regulation.autority,
+      uidCompany: company.uidCompany
+    };
+
+    return firstValueFrom(this.api.postData<Regulation>(apiUrl, body));
   }
 }

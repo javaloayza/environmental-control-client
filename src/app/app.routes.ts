@@ -3,6 +3,7 @@ import { AppLayout } from './layout/component/app.layout';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { COMPANY_STRING_ROUTES } from './company/constants/company-routes';
 import { JweAuthGuard } from '@core/interceptors/jwe-auth.guard';
+import { REGULATION_STRING_ROUTES } from './regulation/constants/regulation-routes';
 
 export const APP_ROUTES: Routes = [
   {
@@ -27,9 +28,9 @@ export const APP_ROUTES: Routes = [
         loadChildren: () => import('./company/company.routes').then(m => m.COMPANY_ROUTES)
       },
       {
-        path: 'regulation',
+        path: REGULATION_STRING_ROUTES.ROOT,
         loadChildren: () => import('./regulation/regulation.routes').then(m => m.REGULATION_ROUTES)
-      }
+      },
     ]
   },
 

@@ -1,11 +1,10 @@
 export interface Regulation {
-  id: string;
-  uid_regulation: string;
-  tipoMonitoreoId: string;
+  idRegulation: number;
+  uidRegulation: string;
+  uidMonitoringType: string;
   code: string;
   title: string;
   description: string;
-  companyId: string;
-  authority?: string;
-  status: string;
+  autority: string;
+  uidCompany: string;
 }

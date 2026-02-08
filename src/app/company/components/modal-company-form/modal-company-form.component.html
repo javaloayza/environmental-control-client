@@ -1,26 +1,77 @@
-
 <p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '25rem' }">
     <ng-template #header>
-        <div class="font-semibold text-xl">Company</div>
+        <div class="font-semibold text-xl">
+          @if(mode === 'Create'){
+            {{ 'company.create' | ct:'Crear Compañia' }}
+          } @else {
+            {{ 'company.update' | ct:'Editar Compañia' }}
+          }
+        </div>
     </ng-template>
-    <div class="flex flex-col gap-2 mb-2">
-        <label for="username" class="font-semibold w-24">NAME</label>
-        <input pInputText id="name" class="flex-auto" autocomplete="off" />
-    </div>
-    <div class="flex flex-col gap-2 mb-2">
-        <label for="ruc" class="font-semibold w-24">RUC</label>
-        <input pInputText id="ruc" class="flex-auto" autocomplete="off" />
-    </div>
-    <div class="flex flex-col gap-2 mb-2">
-        <label for="country" class="font-semibold w-24">Country</label>
-        <input pInputText id="country" class="flex-auto" autocomplete="off" />
-    </div>
-    <div class="flex flex-col gap-2 mb-2">
-        <label for="state" class="font-semibold w-24">State</label>
-        <input pInputText id="state" class="flex-auto" autocomplete="off" />
-    </div>
+
+    <form [formGroup]="companyForm" class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
+            <label for="name" class="font-semibold">{{ 'company.name' | ct:'Nombre' }}</label>
+            <input
+                pInputText
+                id="name"
+                class="flex-auto"
+                autocomplete="off"
+                formControlName="name"
+                [class.ng-invalid]="companyForm.get('name')?.invalid && companyForm.get('name')?.touched"
+            />
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="ruc" class="font-semibold">{{ 'company.ruc' | ct:'RUC' }}</label>
+            <input
+                pInputText
+                id="ruc"
+                class="flex-auto"
+                autocomplete="off"
+                formControlName="ruc"
+                [class.ng-invalid]="companyForm.get('ruc')?.invalid && companyForm.get('ruc')?.touched"
+            />
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="idCountry" class="font-semibold">{{ 'company.country' | ct:'País' }}</label>
+            <input
+                pInputText
+                id="idCountry"
+                class="flex-auto"
+                type="number"
+                formControlName="idCountry"
+                [class.ng-invalid]="companyForm.get('idCountry')?.invalid && companyForm.get('idCountry')?.touched"
+            />
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="idState" class="font-semibold">{{ 'company.state' | ct:'Departamento' }}</label>
+            <input
+                pInputText
+                id="idState"
+                class="flex-auto"
+                type="number"
+                formControlName="idState"
+                [class.ng-invalid]="companyForm.get('idState')?.invalid && companyForm.get('idState')?.touched"
+            />
+        </div>
+    </form>
+
     <ng-template #footer>
-        <p-button label="Cancel" [text]="true" severity="secondary" (click)="visible = false" />
-        <p-button label="Save" [outlined]="true" (click)="visible = false" />
+        <p-button
+            label="Cancel"
+            [text]="true"
+            severity="secondary"
+            (click)="hideModal()"
+        />
+        <p-button
+            label="Save"
+            [outlined]="true"
+            [loading]="loading"
+            [disabled]="!companyForm.valid || loading"
+            (click)="saveCompany()"
+        />
     </ng-template>
 </p-dialog>

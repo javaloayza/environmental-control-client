@@ -1,1 +1,1 @@
-export * from './company-text.pipe';
+export * from './text.pipe';
