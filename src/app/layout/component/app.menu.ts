@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AppMenuitem } from './app.menuitem';
 import { COMPANY_STRING_ROUTES } from 'app/company/constants';
+import { REGULATION_STRING_ROUTES } from 'app/regulation/constants';
 
 @Component({
     selector: 'app-menu',
@@ -25,7 +26,7 @@ export class AppMenu {
                 label: 'Modules',
                 items: [
                     { label: 'Companies', icon: 'pi pi-fw pi-building', routerLink: [COMPANY_STRING_ROUTES.ROOT] },
-                    { label: 'Regulaciones', icon: 'pi pi-fw pi-book', routerLink: ['/regulation'] }
+                    { label: 'Regulaciones', icon: 'pi pi-fw pi-book', routerLink: [REGULATION_STRING_ROUTES.ROOT] }
                 ]
             },
             {
