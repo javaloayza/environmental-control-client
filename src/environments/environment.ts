@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.miapp.com',
+  apiUrl: 'http://localhost:5070',
 };

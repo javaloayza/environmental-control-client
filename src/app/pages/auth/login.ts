@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
+import { AuthService } from '@core/services/auth.service';
+import { NotificationService } from '@core/services/notification.service';
 
 @Component({
     selector: 'app-login',
@@ -54,7 +56,7 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                                 </div>
                                 <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
                             </div>
-                            <p-button label="Sign In" styleClass="w-full" routerLink="/"></p-button>
+                            <p-button label="Sign In" styleClass="w-full" (click)="login()" [loading]="loading"></p-button>
                         </div>
                     </div>
                 </div>
@@ -62,10 +64,40 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
         </div>
     `
 })
-export class Login {
+export class Login implements OnInit {
+    private authService = inject(AuthService);
+    private notificationService = inject(NotificationService);
+    private router = inject(Router);
+    private route = inject(ActivatedRoute);
+
     email: string = '';
-
     password: string = '';
-
     checked: boolean = false;
+    loading: boolean = false;
+    returnUrl: string = '/';
+
+    ngOnInit() {
+        // Capturar el returnUrl de los query params
+        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        console.log('Login initialized - returnUrl:', this.returnUrl);
+    }
+
+    async login() {
+        this.loading = true;
+        console.log('Login button clicked - email:', this.email, '- returnUrl:', this.returnUrl);
+        try {
+            await this.authService.login(this.email, this.password);
+            console.log('Authentication successful, redirecting to:', this.returnUrl);
+            this.notificationService.success('Sesión iniciada correctamente');
+            // Redirigir al returnUrl en lugar de siempre ir al dashboard
+            await this.router.navigateByUrl(this.returnUrl);
+            console.log('Navigation completed');
+        } catch (err: unknown) {
+            console.error('Login error:', err);
+            const errorMessage = err instanceof Error ? err.message : 'Error al iniciar sesión';
+            this.notificationService.error(errorMessage);
+        } finally {
+            this.loading = false;
+        }
+    }
 }

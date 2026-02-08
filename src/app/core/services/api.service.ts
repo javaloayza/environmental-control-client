@@ -16,7 +16,7 @@ export class ApiService {
   private notificationService = inject(NotificationService);
 
   // ⚠️ Global error handler
-  private handleError(error: HttpErrorResponse) {
+  private handleError = (error: HttpErrorResponse) => {
     let message = 'Unknown error occurred';
     if (error.error instanceof ErrorEvent) {
       message = `Client error: ${error.error.message}`;
@@ -28,14 +28,14 @@ export class ApiService {
     console.error('API Error =>', error);
     this.notificationService.error(message);
     return throwError(() => new Error(message));
-  }
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getData<T>(endpoint: string, body?: any): Observable<T> {
     return this.http.post<ApiResponse<T>>(`${this.baseUrl}/${endpoint}`, body ?? {}, { withCredentials: true })
       .pipe(
         map(res => {
-          if (!res.isSuccess) throw new Error(res.message || 'Failed to fetch data');
+          if (!res.success) throw new Error(res.message || 'Failed to fetch data');
           return res.data;
         }),
         catchError(this.handleError),
@@ -47,7 +47,7 @@ export class ApiService {
     return this.http.post<ApiResponse<T>>(`${this.baseUrl}/${endpoint}`, body, { withCredentials: true })
       .pipe(
         map(res => {
-          if (!res.isSuccess) throw new Error(res.message || 'Failed to post data');
+          if (!res.success) throw new Error(res.message || 'Failed to post data');
           return res.data;
         }),
         catchError(this.handleError),
@@ -72,7 +72,7 @@ export class ApiService {
 
     return this.http.post<ApiResponse<T>>(`${this.baseUrl}/${endpoint}`, formData, { withCredentials: true }).pipe(
       map(res => {
-        if (!res.isSuccess) throw new Error(res.message || 'Failed to upload files');
+        if (!res.success) throw new Error(res.message || 'Failed to upload files');
         return res.data;
       }),
       catchError(this.handleError),
