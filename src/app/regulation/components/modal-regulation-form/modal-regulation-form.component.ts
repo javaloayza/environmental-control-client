@@ -11,6 +11,7 @@ import { Regulation } from 'app/regulation/models';
 import { RegulationService } from 'app/regulation/services';
 import { MonitoringTypeService } from 'app/monitoring-type/services';
 import { MonitoringType } from 'app/monitoring-type/models';
+import { CompanyService } from 'app/company/services';
 import { customTextUtil } from '@shared/utils';
 
 @Component({
@@ -24,7 +25,7 @@ export class ModalRegulationFormComponent implements OnInit {
   @Output() saved = new EventEmitter<void>();
 
   mode: 'Create' | 'Update' = 'Create';
-  visible = false;
+  visible = signal(false);
   regulationForm!: FormGroup;
   loading = false;
   monitoringTypes = signal<MonitoringType[]>([]);
@@ -32,12 +33,23 @@ export class ModalRegulationFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private regulationService = inject(RegulationService);
   private monitoringTypeService = inject(MonitoringTypeService);
+  private companyService = inject(CompanyService);
   private notificationService = inject(NotificationService);
 
+  constructor() {
+    // Cargar tipos de monitoreo solo cuando el modal se abre y hay compañía
+    effect(() => {
+      const isVisible = this.visible();
+      const hasCompany = this.companyService.selectedCompany();
+
+      if (isVisible && hasCompany) {
+        this.loadMonitoringTypes();
+      }
+    });
+  }
 
   ngOnInit() {
     this.initializeForm();
-    this.loadMonitoringTypes();
   }
 
   initializeForm() {
@@ -56,6 +68,7 @@ export class ModalRegulationFormComponent implements OnInit {
       this.monitoringTypes.set(types);
     } catch (error) {
       console.error('Error loading monitoring types:', error);
+      this.notificationService.error('No se pudieron cargar los tipos de monitoreo');
     }
   }
 
@@ -69,11 +82,11 @@ export class ModalRegulationFormComponent implements OnInit {
       this.selectedRegulation = null;
       this.regulationForm.reset();
     }
-    this.visible = true;
+    this.visible.set(true);
   }
 
   hideModal() {
-    this.visible = false;
+    this.visible.set(false);
     this.regulationForm.reset();
     this.selectedRegulation = null;
   }

@@ -1,4 +1,4 @@
-<p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '25rem' }">
+<p-dialog [visible]="visible()" (visibleChange)="visible.set($event)" [modal]="true" [style]="{ width: '25rem' }">
     <ng-template #header>
         <div class="font-semibold text-xl">
           @if(mode === 'Create'){
