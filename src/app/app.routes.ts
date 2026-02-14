@@ -4,6 +4,8 @@ import { Dashboard } from './pages/dashboard/dashboard';
 import { COMPANY_STRING_ROUTES } from './company/constants/company-routes';
 import { JweAuthGuard } from '@core/interceptors/jwe-auth.guard';
 import { REGULATION_STRING_ROUTES } from './regulation/constants/regulation-routes';
+import { LOCATION_STRING_ROUTES } from './location/constants/location-routes';
+import { MONITORING_TYPE_STRING_ROUTES } from './monitoring-type/constants/monitoring-type-routes';
 
 export const APP_ROUTES: Routes = [
   {
@@ -30,6 +32,14 @@ export const APP_ROUTES: Routes = [
       {
         path: REGULATION_STRING_ROUTES.ROOT,
         loadChildren: () => import('./regulation/regulation.routes').then(m => m.REGULATION_ROUTES)
+      },
+      {
+        path: LOCATION_STRING_ROUTES.ROOT,
+        loadChildren: () => import('./location/location.routes').then(m => m.LOCATION_ROUTES)
+      },
+      {
+        path: MONITORING_TYPE_STRING_ROUTES.ROOT,
+        loadChildren: () => import('./monitoring-type/monitoring-type.routes').then(m => m.MONITORING_TYPE_ROUTES)
       },
     ]
   },

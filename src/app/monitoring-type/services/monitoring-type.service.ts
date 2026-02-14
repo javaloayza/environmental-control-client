@@ -26,4 +26,50 @@ export class MonitoringTypeService {
     };
     return firstValueFrom(this.api.getData<MonitoringType[]>(apiUrl, body));
   }
+
+  createMonitoringType(monitoringType: Partial<MonitoringType>): Promise<MonitoringType> {
+    const apiUrl = MONITORING_TYPE_ENDPOINTS.INSERT;
+    const company = this.companyService.selectedCompany();
+
+    if (!company) {
+      throw new Error('No company selected');
+    }
+
+    const body = {
+      nameMonitoring: monitoringType.nameMonitoring,
+      description: monitoringType.description,
+      uidCompany: company.uidCompany
+    };
+
+    return firstValueFrom(this.api.postData<MonitoringType>(apiUrl, body));
+  }
+
+  updateMonitoringType(monitoringType: MonitoringType): Promise<MonitoringType> {
+    const apiUrl = MONITORING_TYPE_ENDPOINTS.UPDATE;
+    const company = this.companyService.selectedCompany();
+
+    if (!company) {
+      throw new Error('No company selected');
+    }
+
+    const body = {
+      uidMonitoringType: monitoringType.uidMonitoringType,
+      nameMonitoring: monitoringType.nameMonitoring,
+      description: monitoringType.description,
+      uidCompany: company.uidCompany
+    };
+
+    return firstValueFrom(this.api.postData<MonitoringType>(apiUrl, body));
+  }
+
+  deleteMonitoringType(uidMonitoringType: string): Promise<void> {
+    const apiUrl = MONITORING_TYPE_ENDPOINTS.DELETE;
+
+    const body = {
+      uidMonitoringType: uidMonitoringType
+    };
+
+    return firstValueFrom(this.api.postData<void>(apiUrl, body));
+  }
 }
+
