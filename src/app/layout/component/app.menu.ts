@@ -5,6 +5,8 @@ import { MenuItem } from 'primeng/api';
 import { AppMenuitem } from './app.menuitem';
 import { COMPANY_STRING_ROUTES } from 'app/company/constants';
 import { REGULATION_STRING_ROUTES } from 'app/regulation/constants';
+import { LOCATION_STRING_ROUTES } from 'app/location/constants';
+import { MONITORING_TYPE_STRING_ROUTES } from 'app/monitoring-type/constants';
 
 @Component({
     selector: 'app-menu',
@@ -26,7 +28,9 @@ export class AppMenu {
                 label: 'Modules',
                 items: [
                     { label: 'Companies', icon: 'pi pi-fw pi-building', routerLink: [COMPANY_STRING_ROUTES.ROOT] },
-                    { label: 'Regulaciones', icon: 'pi pi-fw pi-book', routerLink: [REGULATION_STRING_ROUTES.ROOT] }
+                    { label: 'Regulaciones', icon: 'pi pi-fw pi-book', routerLink: [REGULATION_STRING_ROUTES.ROOT] },
+                    { label: 'Ubicaciones', icon: 'pi pi-fw pi-map-marker', routerLink: [LOCATION_STRING_ROUTES.ROOT] },
+                    { label: 'Tipos de Monitoreo', icon: 'pi pi-fw pi-list', routerLink: [MONITORING_TYPE_STRING_ROUTES.ROOT] }
                 ]
             },
             {

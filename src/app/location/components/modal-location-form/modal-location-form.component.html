@@ -1,0 +1,51 @@
+<p-dialog [visible]="visible()" (visibleChange)="visible.set($event)" [modal]="true" [style]="{ width: '25rem' }">
+    <ng-template #header>
+        <div class="font-semibold text-xl">
+          @if(mode === 'Create'){
+            {{ 'location.create' | ct:'Crear Ubicación' }}
+          } @else {
+            {{ 'location.update' | ct:'Editar Ubicación' }}
+          }
+        </div>
+    </ng-template>
+
+    <form [formGroup]="locationForm" class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
+            <label for="name" class="font-semibold">{{ 'location.name' | ct:'Nombre' }}</label>
+            <input
+                pInputText
+                id="name"
+                class="flex-auto"
+                autocomplete="off"
+                formControlName="name"
+                [class.ng-invalid]="locationForm.get('name')?.invalid && locationForm.get('name')?.touched"
+            />
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="description" class="font-semibold">{{ 'location.description' | ct:'Descripción' }}</label>
+            <input
+                pInputText
+                id="description"
+                class="flex-auto"
+                autocomplete="off"
+                formControlName="description"
+                [class.ng-invalid]="locationForm.get('description')?.invalid && locationForm.get('description')?.touched"
+            />
+        </div>
+    </form>
+
+    <ng-template #footer>
+        <p-button
+            type="button"
+            label="Cancel"
+            (onClick)="hideModal()"
+        />
+        <p-button
+            type="button"
+            label="Save"
+            (onClick)="saveLocation()"
+            [loading]="loading"
+        />
+    </ng-template>
+</p-dialog>

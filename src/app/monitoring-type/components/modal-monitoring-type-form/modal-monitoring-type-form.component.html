@@ -1,0 +1,56 @@
+<p-dialog [visible]="visible()" (visibleChange)="visible.set($event)" [modal]="true" [style]="{ width: '25rem' }">
+    <ng-template #header>
+        <div class="font-semibold text-xl">
+          @if(mode === 'Create'){
+            {{ 'monitoring-type.create' | ct:'Crear Tipo de Monitoreo' }}
+          } @else {
+            {{ 'monitoring-type.update' | ct:'Editar Tipo de Monitoreo' }}
+          }
+        </div>
+    </ng-template>
+
+    <form [formGroup]="monitoringTypeForm" class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
+            <label for="nameMonitoring" class="font-semibold">{{ 'monitoring-type.name' | ct:'Nombre' }}</label>
+            <input
+                pInputText
+                id="nameMonitoring"
+                class="flex-auto"
+                autocomplete="off"
+                formControlName="nameMonitoring"
+                [class.ng-invalid]="monitoringTypeForm.get('nameMonitoring')?.invalid && monitoringTypeForm.get('nameMonitoring')?.touched"
+            />
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="description" class="font-semibold">{{ 'monitoring-type.description' | ct:'Descripción' }}</label>
+            <input
+                pInputText
+                id="description"
+                class="flex-auto"
+                autocomplete="off"
+                formControlName="description"
+                [class.ng-invalid]="monitoringTypeForm.get('description')?.invalid && monitoringTypeForm.get('description')?.touched"
+            />
+        </div>
+    </form>
+
+    <ng-template #footer>
+        <div class="flex justify-end gap-2">
+            <p-button 
+                type="button" 
+                label="Cancel" 
+                icon="pi pi-times" 
+                (onClick)="hideModal()"
+                severity="secondary">
+            </p-button>
+            <p-button
+                type="button"
+                label="Save"
+                icon="pi pi-check"
+                (onClick)="saveMonitoringType()"
+                [loading]="loading">
+            </p-button>
+        </div>
+    </ng-template>
+</p-dialog>

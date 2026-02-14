@@ -1,0 +1,54 @@
+<div class="card">
+  <div class="font-semibold text-xl">{{ 'monitoring-type.title' | ct:'Tipo de Monitoreo' }}</div>
+  <div class="flex justify-between my-2">
+    <div class="table-filters">
+      <p-iconfield>
+          <p-inputicon class="pi pi-search" />
+          <input type="text" pInputText placeholder="Search by Name" />
+      </p-iconfield>
+    </div>
+    <div class="flex justify-end">
+    </div>
+    <p-button (onClick)="openCreateModal()" >
+      <div class="flex">
+        <i class="fas fa-plus"></i>
+        <span class="ml-2">{{ 'monitoring-type.create' | ct:'Crear Tipo de Monitoreo' }}</span>
+      </div>
+    </p-button>
+  </div>
+  <p-table
+    [value]="monitoringTypes()"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[5, 10, 20]"
+  >
+      <ng-template pTemplate="header">
+          <tr>
+              <th class="capitalize">{{ 'monitoring-type.name' | ct:'Nombre' }}</th>
+              <th class="capitalize">{{ 'monitoring-type.description' | ct:'Descripción' }}</th>
+              <th class="capitalize">{{ 'monitoring-type.actions' | ct:'Acciones' }}</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-monitoringType>
+          <tr>
+              <td>{{ monitoringType.nameMonitoring }}</td>
+              <td>{{ monitoringType.description }}</td>
+              <td>
+                <div class="flex gap-2">
+                  <div>
+                  <p-button severity="secondary" rounded="true" icon="fas fa-pencil" (onClick)="openEditModal(monitoringType)"></p-button>
+                  </div>
+                  <div>
+                  <p-button severity="secondary" rounded="true" icon="fas fa-trash"></p-button>
+                  </div>
+                </div>
+              </td>
+          </tr>
+      </ng-template>
+  </p-table>
+</div>
+
+<app-modal-monitoring-type-form
+  #monitoringTypeForm
+  (saved)="onMonitoringTypeSaved()"
+></app-modal-monitoring-type-form>
