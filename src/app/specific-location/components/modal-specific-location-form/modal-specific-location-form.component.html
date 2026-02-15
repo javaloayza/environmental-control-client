@@ -1,0 +1,67 @@
+<p-dialog [visible]="visible()" (visibleChange)="visible.set($event)" [modal]="true" [style]="{ width: '25rem' }">
+    <ng-template #header>
+        <div class="font-semibold text-xl">
+          @if(mode === 'Create'){
+            {{ 'specific-location.create' | ct:'Crear Ubicacion Especifica' }}
+          } @else {
+            {{ 'specific-location.update' | ct:'Editar Ubicacion Especifica' }}
+          }
+        </div>
+    </ng-template>
+
+    <form [formGroup]="specificLocationForm" class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
+            <label for="uidLocation" class="font-semibold">{{ 'specific-location.location' | ct:'Ubicacion' }}</label>
+            <p-select
+                id="uidLocation"
+                [options]="locations()"
+                formControlName="uidLocation"
+                optionLabel="name"
+                optionValue="uidLocation"
+                placeholder="Seleccione una ubicacion"
+                class="w-full"
+                [class.ng-invalid]="specificLocationForm.get('uidLocation')?.invalid && specificLocationForm.get('uidLocation')?.touched"
+            />
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="name" class="font-semibold">{{ 'specific-location.name' | ct:'Nombre' }}</label>
+            <input
+                pInputText
+                id="name"
+                class="flex-auto"
+                autocomplete="off"
+                formControlName="name"
+                [class.ng-invalid]="specificLocationForm.get('name')?.invalid && specificLocationForm.get('name')?.touched"
+            />
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="description" class="font-semibold">{{ 'specific-location.description' | ct:'Descripcion' }}</label>
+            <input
+                pInputText
+                id="description"
+                class="flex-auto"
+                autocomplete="off"
+                formControlName="description"
+                [class.ng-invalid]="specificLocationForm.get('description')?.invalid && specificLocationForm.get('description')?.touched"
+            />
+        </div>
+    </form>
+
+    <ng-template #footer>
+        <p-button
+            label="Cancel"
+            [text]="true"
+            severity="secondary"
+            (click)="hideModal()"
+        />
+        <p-button
+            label="Save"
+            [outlined]="true"
+            [loading]="loading"
+            [disabled]="!specificLocationForm.valid || loading"
+            (click)="saveSpecificLocation()"
+        />
+    </ng-template>
+</p-dialog>

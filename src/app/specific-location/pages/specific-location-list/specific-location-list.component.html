@@ -1,0 +1,67 @@
+<div class="card">
+  <div class="font-semibold text-xl">{{ 'specific-location.title' | ct:'Ubicacion Especifica' }}</div>
+  <div class="flex flex-wrap justify-between gap-2 my-2">
+    <div class="table-filters flex flex-wrap gap-2">
+      <p-iconfield>
+          <p-inputicon class="pi pi-search" />
+          <input type="text" pInputText placeholder="Search by Name" (input)="onSearchChange($event)" />
+      </p-iconfield>
+      <p-select
+        [options]="locations()"
+        optionLabel="name"
+        optionValue="uidLocation"
+        placeholder="Filter by Location"
+        class="w-16rem"
+        [ngModel]="selectedLocationUid()"
+        (onChange)="onLocationChange($event.value)"
+      />
+    </div>
+    <div class="flex justify-end">
+    </div>
+    <p-button (onClick)="openCreateModal()" >
+      <div class="flex">
+        <i class="fas fa-plus"></i>
+        <span class="ml-2">{{ 'specific-location.create' | ct:'Crear Ubicacion Especifica' }}</span>
+      </div>
+    </p-button>
+  </div>
+  <p-table
+    [value]="filteredSpecificLocations()"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[5, 10, 20]"
+  >
+      <ng-template pTemplate="header">
+          <tr>
+              <th class="capitalize">{{ 'specific-location.companyName' | ct:'Compania' }}</th>
+              <th class="capitalize">{{ 'specific-location.locationName' | ct:'Ubicacion' }}</th>
+              <th class="capitalize">{{ 'specific-location.name' | ct:'Nombre' }}</th>
+              <th class="capitalize">{{ 'specific-location.description' | ct:'Descripcion' }}</th>
+              <th class="capitalize">{{ 'specific-location.actions' | ct:'Acciones' }}</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-specificLocation>
+          <tr>
+              <td>{{ specificLocation.companyName || '-' }}</td>
+              <td>{{ specificLocation.locationName || '-' }}</td>
+              <td>{{ specificLocation.name }}</td>
+              <td>{{ specificLocation.description }}</td>
+              <td>
+                <div class="flex gap-2">
+                  <div>
+                  <p-button severity="secondary" rounded="true" icon="fas fa-pencil" (onClick)="openEditModal(specificLocation)"></p-button>
+                  </div>
+                  <div>
+                  <p-button severity="secondary" rounded="true" icon="fas fa-trash" (onClick)="deleteSpecificLocation(specificLocation)"></p-button>
+                  </div>
+                </div>
+              </td>
+          </tr>
+      </ng-template>
+  </p-table>
+</div>
+
+<app-modal-specific-location-form
+  #specificLocationForm
+  (saved)="onSpecificLocationSaved()"
+></app-modal-specific-location-form>

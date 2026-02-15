@@ -6,6 +6,8 @@ import { JweAuthGuard } from '@core/interceptors/jwe-auth.guard';
 import { REGULATION_STRING_ROUTES } from './regulation/constants/regulation-routes';
 import { LOCATION_STRING_ROUTES } from './location/constants/location-routes';
 import { MONITORING_TYPE_STRING_ROUTES } from './monitoring-type/constants/monitoring-type-routes';
+import { SPECIFIC_LOCATION_STRING_ROUTES } from './specific-location/constants/specific-location-routes';
+import { PARAMETER_STRING_ROUTES } from './parameter/constants/parameter-routes';
 
 export const APP_ROUTES: Routes = [
   {
@@ -40,6 +42,14 @@ export const APP_ROUTES: Routes = [
       {
         path: MONITORING_TYPE_STRING_ROUTES.ROOT,
         loadChildren: () => import('./monitoring-type/monitoring-type.routes').then(m => m.MONITORING_TYPE_ROUTES)
+      },
+      {
+        path: SPECIFIC_LOCATION_STRING_ROUTES.ROOT,
+        loadChildren: () => import('./specific-location/specific-location.routes').then(m => m.SPECIFIC_LOCATION_ROUTES)
+      },
+      {
+        path: PARAMETER_STRING_ROUTES.ROOT,
+        loadChildren: () => import('./parameter/parameter.routes').then(m => m.PARAMETER_ROUTES)
       },
     ]
   },

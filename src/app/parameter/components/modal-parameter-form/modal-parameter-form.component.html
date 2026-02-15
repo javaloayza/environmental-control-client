@@ -1,0 +1,104 @@
+<p-dialog [visible]="visible()" (visibleChange)="visible.set($event)" [modal]="true" [style]="{ width: '28rem' }">
+    <ng-template #header>
+        <div class="font-semibold text-xl">
+          @if(mode === 'Create'){
+            {{ 'parameter.create' | ct:'Crear Parametro' }}
+          } @else {
+            {{ 'parameter.update' | ct:'Editar Parametro' }}
+          }
+        </div>
+    </ng-template>
+
+    <form [formGroup]="parameterForm" class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
+            <label for="uidRegulation" class="font-semibold">{{ 'parameter.regulation' | ct:'Regulacion' }}</label>
+            <p-select
+                id="uidRegulation"
+                [options]="regulations()"
+                formControlName="uidRegulation"
+                optionLabel="title"
+                optionValue="uidRegulation"
+                placeholder="Seleccione una regulacion"
+                class="w-full"
+                [class.ng-invalid]="parameterForm.get('uidRegulation')?.invalid && parameterForm.get('uidRegulation')?.touched"
+            />
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="name" class="font-semibold">{{ 'parameter.name' | ct:'Nombre' }}</label>
+            <input
+                pInputText
+                id="name"
+                class="flex-auto"
+                autocomplete="off"
+                formControlName="name"
+                [class.ng-invalid]="parameterForm.get('name')?.invalid && parameterForm.get('name')?.touched"
+            />
+        </div>
+
+        <div class="grid">
+            <div class="col-6 flex flex-col gap-2">
+                <label for="lmin" class="font-semibold">{{ 'parameter.lmin' | ct:'Lmin' }}</label>
+                <input
+                    pInputText
+                    id="lmin"
+                    type="number"
+                    class="flex-auto"
+                    formControlName="lmin"
+                    [class.ng-invalid]="parameterForm.get('lmin')?.invalid && parameterForm.get('lmin')?.touched"
+                />
+            </div>
+            <div class="col-6 flex flex-col gap-2">
+                <label for="lmax" class="font-semibold">{{ 'parameter.lmax' | ct:'Lmax' }}</label>
+                <input
+                    pInputText
+                    id="lmax"
+                    type="number"
+                    class="flex-auto"
+                    formControlName="lmax"
+                    [class.ng-invalid]="parameterForm.get('lmax')?.invalid && parameterForm.get('lmax')?.touched"
+                />
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="reference" class="font-semibold">{{ 'parameter.reference' | ct:'Referencia' }}</label>
+            <input
+                pInputText
+                id="reference"
+                class="flex-auto"
+                autocomplete="off"
+                formControlName="reference"
+                [class.ng-invalid]="parameterForm.get('reference')?.invalid && parameterForm.get('reference')?.touched"
+            />
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="description" class="font-semibold">{{ 'parameter.description' | ct:'Descripcion' }}</label>
+            <input
+                pInputText
+                id="description"
+                class="flex-auto"
+                autocomplete="off"
+                formControlName="description"
+                [class.ng-invalid]="parameterForm.get('description')?.invalid && parameterForm.get('description')?.touched"
+            />
+        </div>
+    </form>
+
+    <ng-template #footer>
+        <p-button
+            label="Cancel"
+            [text]="true"
+            severity="secondary"
+            (click)="hideModal()"
+        />
+        <p-button
+            label="Save"
+            [outlined]="true"
+            [loading]="loading"
+            [disabled]="!parameterForm.valid || loading"
+            (click)="saveParameter()"
+        />
+    </ng-template>
+</p-dialog>

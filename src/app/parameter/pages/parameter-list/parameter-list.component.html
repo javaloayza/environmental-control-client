@@ -1,0 +1,86 @@
+<div class="card">
+  <div class="font-semibold text-xl">{{ 'parameter.title' | ct:'Parametros' }}</div>
+  <div class="flex flex-wrap justify-between gap-2 my-2">
+    <div class="table-filters flex flex-wrap gap-2">
+      <p-select
+        [options]="monitoringTypes()"
+        optionLabel="nameMonitoring"
+        optionValue="uidMonitoringType"
+        placeholder="Tipo de Monitoreo"
+        class="w-16rem"
+        [ngModel]="selectedMonitoringTypeUid()"
+        (onChange)="onMonitoringTypeChange($event.value)"
+      />
+      <p-select
+        [options]="filteredRegulations()"
+        optionLabel="title"
+        optionValue="uidRegulation"
+        placeholder="Regulacion"
+        class="w-16rem"
+        [ngModel]="selectedRegulationUid()"
+        (onChange)="onRegulationChange($event.value)"
+      />
+      <p-iconfield>
+          <p-inputicon class="pi pi-search" />
+          <input type="text" pInputText placeholder="Search by Name" (input)="onSearchChange($event)" />
+      </p-iconfield>
+    </div>
+    <div class="flex justify-end">
+    </div>
+    <p-button (onClick)="openCreateModal()" >
+      <div class="flex">
+        <i class="fas fa-plus"></i>
+        <span class="ml-2">{{ 'parameter.create' | ct:'Crear Parametro' }}</span>
+      </div>
+    </p-button>
+  </div>
+  <p-table
+    [value]="filteredParameters()"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[5, 10, 20]"
+  >
+      <ng-template pTemplate="header">
+          <tr>
+              <th class="capitalize">{{ 'parameter.name' | ct:'Nombre' }}</th>
+              <th class="capitalize">{{ 'parameter.idRegulation' | ct:'Id Regulacion' }}</th>
+              <th class="capitalize">{{ 'parameter.lmin' | ct:'Lmin' }}</th>
+              <th class="capitalize">{{ 'parameter.lmax' | ct:'Lmax' }}</th>
+              <th class="capitalize">{{ 'parameter.reference' | ct:'Referencia' }}</th>
+              <th class="capitalize">{{ 'parameter.description' | ct:'Descripcion' }}</th>
+              <th class="capitalize">{{ 'parameter.actions' | ct:'Acciones' }}</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-parameter>
+          <tr>
+              <td>{{ parameter.name }}</td>
+              <td>{{ parameter.idRegulation || '-' }}</td>
+              <td>{{ parameter.lmin }}</td>
+              <td>{{ parameter.lmax }}</td>
+              <td>{{ parameter.reference }}</td>
+              <td>
+                <ng-container *ngIf="parameter.description; else emptyDescription">
+                  <span class="pi pi-info-circle" [pTooltip]="parameter.description" tooltipPosition="top"></span>
+                </ng-container>
+                <ng-template #emptyDescription>-</ng-template>
+              </td>
+              <td>
+                <div class="flex gap-2">
+                  <div>
+                  <p-button severity="secondary" rounded="true" icon="fas fa-pencil" (onClick)="openEditModal(parameter)"></p-button>
+                  </div>
+                  <div>
+                  <p-button severity="secondary" rounded="true" icon="fas fa-trash" (onClick)="deleteParameter(parameter)"></p-button>
+                  </div>
+                </div>
+              </td>
+          </tr>
+      </ng-template>
+  </p-table>
+</div>
+
+<app-modal-parameter-form
+  #parameterForm
+  [defaultRegulationUid]="selectedRegulationUid()"
+  (saved)="onParameterSaved()"
+></app-modal-parameter-form>
