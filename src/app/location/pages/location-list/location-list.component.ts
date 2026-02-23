@@ -5,6 +5,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
+import { ConfirmationService } from 'primeng/api';
 import { ModalLocationFormComponent } from "app/location/components";
 import { NotificationService } from '@core/services';
 import { TextPipe } from '@shared/pipes';
@@ -24,7 +25,7 @@ export class LocationListComponent implements OnInit {
   notificationService = inject(NotificationService);
   locationService = inject(LocationService);
   companyService = inject(CompanyService);
-
+  confirmationService = inject(ConfirmationService);
   locations = signal<Location[]>([]);
 
   constructor() {
@@ -48,7 +49,6 @@ export class LocationListComponent implements OnInit {
     this.locationService.getLocations().then(locations => {
       this.locations.set(locations);
     }).catch(error => {
-      console.error('Error loading locations:', error);
       this.notificationService.error('Error al cargar las ubicaciones');
     });
   }

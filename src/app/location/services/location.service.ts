@@ -15,14 +15,14 @@ export class LocationService {
 
   getLocations(uidCompany?: string): Promise<Location[]> {
     const apiUrl = LOCATION_ENDPOINTS.GET_LIST;
-    const company = uidCompany || this.companyService.selectedCompany()?.uidCompany;
+    const company = this.companyService.selectedCompany();
 
     if (!company) {
       throw new Error('No company selected');
     }
 
     const body = {
-      "uidCompany": company
+      idCompany: company.idCompany
     };
     return firstValueFrom(this.api.getData<Location[]>(apiUrl, body));
   }
@@ -35,10 +35,16 @@ export class LocationService {
       throw new Error('No company selected');
     }
 
+    if (company.idCompany === 0 || company.idCompany === null || company.idCompany === undefined) {
+      throw new Error('Invalid company idCompany');
+    }
+
     const body = {
-      name: location.name,
+      idCompany: company.idCompany,
+      codeLocation: location.codeLocation,
       description: location.description,
-      uidCompany: company.uidCompany
+      longitude: location.longitude,
+      latitude: location.latitude
     };
 
     return firstValueFrom(this.api.postData<Location>(apiUrl, body));
@@ -54,9 +60,11 @@ export class LocationService {
 
     const body = {
       uidLocation: location.uidLocation,
-      name: location.name,
+      idCompany: company.idCompany,
+      codeLocation: location.codeLocation,
       description: location.description,
-      uidCompany: company.uidCompany
+      longitude: location.longitude,
+      latitude: location.latitude
     };
 
     return firstValueFrom(this.api.postData<Location>(apiUrl, body));
