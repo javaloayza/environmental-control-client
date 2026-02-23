@@ -5,7 +5,7 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { provideServiceWorker } from '@angular/service-worker';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import Aura from '@primeuix/themes/aura';
 import { APP_ROUTES } from './app.routes';
 import { authInterceptor } from '@core/interceptors/auth.interceptor';
@@ -24,6 +24,7 @@ export const appConfig: ApplicationConfig = {
       registrationStrategy: 'registerWhenStable:30000',
     }),
     MessageService,
+    ConfirmationService,
     providePrimeNG({
       theme: {
         preset: Aura,

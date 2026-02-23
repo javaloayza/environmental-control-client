@@ -11,14 +11,14 @@
 
     <form [formGroup]="locationForm" class="flex flex-col gap-4">
         <div class="flex flex-col gap-2">
-            <label for="name" class="font-semibold">{{ 'location.name' | ct:'Nombre' }}</label>
+            <label for="codeLocation" class="font-semibold">{{ 'location.code' | ct:'Código' }}</label>
             <input
                 pInputText
-                id="name"
+                id="codeLocation"
                 class="flex-auto"
                 autocomplete="off"
-                formControlName="name"
-                [class.ng-invalid]="locationForm.get('name')?.invalid && locationForm.get('name')?.touched"
+                formControlName="codeLocation"
+                [class.ng-invalid]="locationForm.get('codeLocation')?.invalid && locationForm.get('codeLocation')?.touched"
             />
         </div>
 
@@ -31,6 +31,30 @@
                 autocomplete="off"
                 formControlName="description"
                 [class.ng-invalid]="locationForm.get('description')?.invalid && locationForm.get('description')?.touched"
+            />
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="longitude" class="font-semibold">{{ 'location.longitude' | ct:'Longitud' }}</label>
+            <input
+                pInputText
+                id="longitude"
+                class="flex-auto"
+                autocomplete="off"
+                formControlName="longitude"
+                [class.ng-invalid]="locationForm.get('longitude')?.invalid && locationForm.get('longitude')?.touched"
+            />
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="latitude" class="font-semibold">{{ 'location.latitude' | ct:'Latitud' }}</label>
+            <input
+                pInputText
+                id="latitude"
+                class="flex-auto"
+                autocomplete="off"
+                formControlName="latitude"
+                [class.ng-invalid]="locationForm.get('latitude')?.invalid && locationForm.get('latitude')?.touched"
             />
         </div>
     </form>

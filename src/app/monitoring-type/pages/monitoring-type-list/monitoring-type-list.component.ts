@@ -5,6 +5,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
+import { ConfirmationService } from 'primeng/api';
 import { ModalMonitoringTypeFormComponent } from "app/monitoring-type/components";
 import { NotificationService } from '@core/services';
 import { TextPipe } from '@shared/pipes';
@@ -24,7 +25,7 @@ export class MonitoringTypeListComponent implements OnInit {
   notificationService = inject(NotificationService);
   monitoringTypeService = inject(MonitoringTypeService);
   companyService = inject(CompanyService);
-
+  confirmationService = inject(ConfirmationService);
   monitoringTypes = signal<MonitoringType[]>([]);
 
   constructor() {

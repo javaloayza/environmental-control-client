@@ -38,16 +38,12 @@
                   <div>
                   <p-button severity="secondary" rounded="true" icon="fas fa-pencil" (onClick)="openEditModal(monitoringType)"></p-button>
                   </div>
-                  <div>
-                  <p-button severity="secondary" rounded="true" icon="fas fa-trash"></p-button>
-                  </div>
                 </div>
               </td>
           </tr>
       </ng-template>
   </p-table>
 </div>
-
 <app-modal-monitoring-type-form
   #monitoringTypeForm
   (saved)="onMonitoringTypeSaved()"

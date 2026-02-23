@@ -37,8 +37,10 @@ export class ModalLocationFormComponent implements OnInit {
 
   initializeForm() {
     this.locationForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      description: ['', [Validators.required, Validators.minLength(5)]],
+      codeLocation: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+      longitude: ['', [Validators.required]],
+      latitude: ['', [Validators.required]]
     });
   }
 
@@ -63,7 +65,14 @@ export class ModalLocationFormComponent implements OnInit {
 
   async saveLocation() {
     if (!this.locationForm.valid) {
-      this.notificationService.warn('Please fill in all required fields correctly');
+      this.notificationService.warn('Por favor completa todos los campos requeridos correctamente');
+      return;
+    }
+
+    const company = this.companyService.selectedCompany();
+
+    if (!company) {
+      this.notificationService.error('Por favor selecciona una empresa');
       return;
     }
 
@@ -76,10 +85,14 @@ export class ModalLocationFormComponent implements OnInit {
         this.notificationService.success(customTextUtil('location.created', 'Ubicación Creada'));
       } else {
         const locationData: Location = {
-          ...formValue,
           idLocation: this.selectedLocation?.idLocation || 0,
           uidLocation: this.selectedLocation?.uidLocation || '',
-          uidCompany: this.selectedLocation?.uidCompany || ''
+          idCompany: company.idCompany,
+          codeLocation: formValue.codeLocation,
+          description: formValue.description,
+          longitude: formValue.longitude,
+          latitude: formValue.latitude,
+          status: this.selectedLocation?.status || 1
         };
         await this.locationService.updateLocation(locationData);
         this.notificationService.success(customTextUtil('location.updated', 'Ubicación Actualizada'));
@@ -87,6 +100,8 @@ export class ModalLocationFormComponent implements OnInit {
 
       this.saved.emit();
       this.hideModal();
+    } catch (error: any) {
+      this.notificationService.error(error?.message || 'Error al guardar la ubicación');
     } finally {
       this.loading = false;
     }
