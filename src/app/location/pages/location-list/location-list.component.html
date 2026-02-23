@@ -24,22 +24,19 @@
   >
       <ng-template pTemplate="header">
           <tr>
-              <th class="capitalize">{{ 'location.name' | ct:'Nombre' }}</th>
+              <th class="capitalize">{{ 'location.code' | ct:'Código' }}</th>
               <th class="capitalize">{{ 'location.description' | ct:'Descripción' }}</th>
               <th class="capitalize">{{ 'location.actions' | ct:'Acciones' }}</th>
           </tr>
       </ng-template>
       <ng-template pTemplate="body" let-location>
           <tr>
-              <td>{{ location.name }}</td>
+              <td>{{ location.codeLocation }}</td>
               <td>{{ location.description }}</td>
               <td>
                 <div class="flex gap-2">
                   <div>
                   <p-button severity="secondary" rounded="true" icon="fas fa-pencil" (onClick)="openEditModal(location)"></p-button>
-                  </div>
-                  <div>
-                  <p-button severity="secondary" rounded="true" icon="fas fa-trash"></p-button>
                   </div>
                 </div>
               </td>
@@ -47,7 +44,6 @@
       </ng-template>
   </p-table>
 </div>
-
 <app-modal-location-form
   #locationForm
   (saved)="onLocationSaved()"

@@ -111,9 +111,12 @@ export class AppTopbar implements OnInit {
     async loadCompanies(): Promise<void> {
         try {
             this.companies = await this.companyService.getCompanies();
+            console.log('Companies loaded:', this.companies);
             // Seleccionar el primer registro
             if (this.companies.length > 0) {
                 this.selectedCompany = this.companies[0];
+                console.log('Selected company:', this.selectedCompany);
+                console.log('Company idCompany:', this.selectedCompany?.idCompany);
                 this.companyService.setSelectedCompany(this.selectedCompany);
             }
         } catch (error) {
