@@ -1,4 +1,4 @@
-export interface Parameter {
+export interface Standard {
   idParameter?: number;
   uidParameter: string;
   uidRegulation: string;

@@ -8,7 +8,7 @@ import { REGULATION_STRING_ROUTES } from 'app/regulation/constants';
 import { LOCATION_STRING_ROUTES } from 'app/location/constants';
 import { MONITORING_TYPE_STRING_ROUTES } from 'app/monitoring-type/constants';
 import { SPECIFIC_LOCATION_STRING_ROUTES } from 'app/specific-location/constants';
-import { PARAMETER_STRING_ROUTES } from 'app/parameter/constants';
+import { STANDARD_STRING_ROUTES } from 'app/standard/constants';
 
 @Component({
     selector: 'app-menu',
@@ -34,7 +34,7 @@ export class AppMenu {
                     { label: 'Ubicaciones', icon: 'pi pi-fw pi-map-marker', routerLink: [LOCATION_STRING_ROUTES.ROOT] },
                     { label: 'Tipos de Monitoreo', icon: 'pi pi-fw pi-list', routerLink: [MONITORING_TYPE_STRING_ROUTES.ROOT] },
                     { label: 'Ubicaciones Especificas', icon: 'pi pi-fw pi-map', routerLink: [SPECIFIC_LOCATION_STRING_ROUTES.ROOT] },
-                    { label: 'Parametros', icon: 'pi pi-fw pi-sliders-h', routerLink: [PARAMETER_STRING_ROUTES.ROOT] }
+                    { label: 'Parametros', icon: 'pi pi-fw pi-sliders-h', routerLink: [STANDARD_STRING_ROUTES.ROOT] }
                 ]
             },
             {

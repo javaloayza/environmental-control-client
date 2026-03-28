@@ -2,19 +2,19 @@
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ApiService } from '@core/services';
-import { Parameter } from '../models';
-import { PARAMETER_ENDPOINTS } from '../constants';
+import { Standard } from '../models';
+import { STANDARD_ENDPOINTS } from '../constants';
 import { CompanyService } from '../../company/services/company.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ParameterService {
+export class StandardService {
   private api = inject(ApiService);
   private companyService = inject(CompanyService);
 
-  getParameters(uidRegulation: string, uidCompany?: string): Promise<Parameter[]> {
-    const apiUrl = PARAMETER_ENDPOINTS.GET_LIST;
+  getStandards(uidRegulation: string, uidCompany?: string): Promise<Standard[]> {
+    const apiUrl = STANDARD_ENDPOINTS.GET_LIST;
     const company = uidCompany || this.companyService.selectedCompany()?.uidCompany;
 
     if (!company) {
@@ -26,11 +26,11 @@ export class ParameterService {
       "uidRegulation": uidRegulation
     };
 
-    return firstValueFrom(this.api.getData<Parameter[]>(apiUrl, body));
+    return firstValueFrom(this.api.getData<Standard[]>(apiUrl, body));
   }
 
-  createParameter(parameter: Partial<Parameter>): Promise<Parameter> {
-    const apiUrl = PARAMETER_ENDPOINTS.INSERT;
+  createStandard(parameter: Partial<Standard>): Promise<Standard> {
+    const apiUrl = STANDARD_ENDPOINTS.INSERT;
     const company = this.companyService.selectedCompany();
 
     if (!company) {
@@ -47,11 +47,11 @@ export class ParameterService {
       uidCompany: company.uidCompany
     };
 
-    return firstValueFrom(this.api.postData<Parameter>(apiUrl, body));
+    return firstValueFrom(this.api.postData<Standard>(apiUrl, body));
   }
 
-  updateParameter(parameter: Parameter): Promise<Parameter> {
-    const apiUrl = PARAMETER_ENDPOINTS.UPDATE;
+  updateStandard(parameter: Standard): Promise<Standard> {
+    const apiUrl = STANDARD_ENDPOINTS.UPDATE;
     const company = this.companyService.selectedCompany();
 
     if (!company) {
@@ -69,11 +69,11 @@ export class ParameterService {
       uidCompany: company.uidCompany
     };
 
-    return firstValueFrom(this.api.postData<Parameter>(apiUrl, body));
+    return firstValueFrom(this.api.postData<Standard>(apiUrl, body));
   }
 
-  deleteParameter(uidParameter: string): Promise<void> {
-    const apiUrl = PARAMETER_ENDPOINTS.DELETE;
+  deleteStandard(uidParameter: string): Promise<void> {
+    const apiUrl = STANDARD_ENDPOINTS.DELETE;
 
     const body = {
       uidParameter: uidParameter

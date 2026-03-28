@@ -7,32 +7,32 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { inject } from '@angular/core';
 import { NotificationService } from '@core/services';
-import { Parameter } from 'app/parameter/models';
-import { ParameterService } from 'app/parameter/services';
+import { Standard } from 'app/standard/models';
+import { StandardService } from 'app/standard/services';
 import { RegulationService } from 'app/regulation/services';
 import { Regulation } from 'app/regulation/models';
 import { CompanyService } from 'app/company/services';
 import { customTextUtil } from '@shared/utils';
 
 @Component({
-  selector: 'app-modal-parameter-form',
-  templateUrl: './modal-parameter-form.component.html',
-  styleUrls: ['./modal-parameter-form.component.scss'],
+  selector: 'app-modal-standard-form',
+  templateUrl: './modal-standard-form.component.html',
+  styleUrls: ['./modal-standard-form.component.scss'],
   imports: [DialogModule, InputTextModule, ButtonModule, SelectModule, TextPipe, ReactiveFormsModule]
 })
-export class ModalParameterFormComponent implements OnInit {
-  @Input() selectedParameter: Parameter | null = null;
+export class ModalStandardFormComponent implements OnInit {
+  @Input() selectedStandard: Standard | null = null;
   @Input() defaultRegulationUid: string | null = null;
   @Output() saved = new EventEmitter<void>();
 
   mode: 'Create' | 'Update' = 'Create';
   visible = signal(false);
-  parameterForm!: FormGroup;
+  standardForm!: FormGroup;
   loading = false;
   regulations = signal<Regulation[]>([]);
 
   private fb = inject(FormBuilder);
-  private parameterService = inject(ParameterService);
+  private standardService = inject(StandardService);
   private regulationService = inject(RegulationService);
   private companyService = inject(CompanyService);
   private notificationService = inject(NotificationService);
@@ -53,7 +53,7 @@ export class ModalParameterFormComponent implements OnInit {
   }
 
   initializeForm() {
-    this.parameterForm = this.fb.group({
+    this.standardForm = this.fb.group({
       uidRegulation: ['', [Validators.required]],
       name: ['', [Validators.required, Validators.minLength(3)]],
       lmin: [null, [Validators.required]],
@@ -73,11 +73,11 @@ export class ModalParameterFormComponent implements OnInit {
     }
   }
 
-  showModal(parameter?: Parameter) {
+  showModal(parameter?: Standard) {
     if (parameter) {
       this.mode = 'Update';
-      this.selectedParameter = parameter;
-      this.parameterForm.patchValue({
+      this.selectedStandard = parameter;
+      this.standardForm.patchValue({
         uidRegulation: parameter.uidRegulation,
         name: parameter.name,
         lmin: parameter.lmin,
@@ -87,11 +87,11 @@ export class ModalParameterFormComponent implements OnInit {
       });
     } else {
       this.mode = 'Create';
-      this.selectedParameter = null;
-      this.parameterForm.reset();
+      this.selectedStandard = null;
+      this.standardForm.reset();
 
       if (this.defaultRegulationUid) {
-        this.parameterForm.patchValue({
+        this.standardForm.patchValue({
           uidRegulation: this.defaultRegulationUid
         });
       }
@@ -101,31 +101,31 @@ export class ModalParameterFormComponent implements OnInit {
 
   hideModal() {
     this.visible.set(false);
-    this.parameterForm.reset();
-    this.selectedParameter = null;
+    this.standardForm.reset();
+    this.selectedStandard = null;
   }
 
-  async saveParameter() {
-    if (!this.parameterForm.valid) {
+  async saveStandard() {
+    if (!this.standardForm.valid) {
       this.notificationService.warn('Please fill in all required fields correctly');
       return;
     }
 
     this.loading = true;
     try {
-      const formValue = this.parameterForm.value;
+      const formValue = this.standardForm.value;
 
       if (this.mode === 'Create') {
-        await this.parameterService.createParameter(formValue);
-        this.notificationService.success(customTextUtil('parameter.created', 'Parametro Creado'));
+        await this.standardService.createStandard(formValue);
+        this.notificationService.success(customTextUtil('standard.created', 'Parametro Creado'));
       } else {
-        const parameterData: Parameter = {
+        const parameterData: Standard = {
           ...formValue,
-          uidParameter: this.selectedParameter?.uidParameter || '',
-          uidCompany: this.selectedParameter?.uidCompany || ''
+          uidParameter: this.selectedStandard?.uidParameter || '',
+          uidCompany: this.selectedStandard?.uidCompany || ''
         };
-        await this.parameterService.updateParameter(parameterData);
-        this.notificationService.success(customTextUtil('parameter.updated', 'Parametro Actualizado'));
+        await this.standardService.updateStandard(parameterData);
+        this.notificationService.success(customTextUtil('standard.updated', 'Parametro Actualizado'));
       }
 
       this.saved.emit();

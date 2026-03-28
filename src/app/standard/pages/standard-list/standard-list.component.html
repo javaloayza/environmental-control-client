@@ -1,5 +1,5 @@
 <div class="card">
-  <div class="font-semibold text-xl">{{ 'parameter.title' | ct:'Parametros' }}</div>
+  <div class="font-semibold text-xl">{{ 'standard.title' | ct:'Standards' }}</div>
   <div class="flex flex-wrap justify-between gap-2 my-2">
     <div class="table-filters flex flex-wrap gap-2">
       <p-select
@@ -30,25 +30,25 @@
     <p-button (onClick)="openCreateModal()" >
       <div class="flex">
         <i class="fas fa-plus"></i>
-        <span class="ml-2">{{ 'parameter.create' | ct:'Crear Parametro' }}</span>
+        <span class="ml-2">{{ 'standard.create' | ct:'Crear Parametro' }}</span>
       </div>
     </p-button>
   </div>
   <p-table
-    [value]="filteredParameters()"
+    [value]="filteredStandards()"
     [paginator]="true"
     [rows]="10"
     [rowsPerPageOptions]="[5, 10, 20]"
   >
       <ng-template pTemplate="header">
           <tr>
-              <th class="capitalize">{{ 'parameter.name' | ct:'Nombre' }}</th>
-              <th class="capitalize">{{ 'parameter.idRegulation' | ct:'Id Regulacion' }}</th>
-              <th class="capitalize">{{ 'parameter.lmin' | ct:'Lmin' }}</th>
-              <th class="capitalize">{{ 'parameter.lmax' | ct:'Lmax' }}</th>
-              <th class="capitalize">{{ 'parameter.reference' | ct:'Referencia' }}</th>
-              <th class="capitalize">{{ 'parameter.description' | ct:'Descripcion' }}</th>
-              <th class="capitalize">{{ 'parameter.actions' | ct:'Acciones' }}</th>
+              <th class="capitalize">{{ 'standard.name' | ct:'Nombre' }}</th>
+              <th class="capitalize">{{ 'standard.idRegulation' | ct:'Id Regulacion' }}</th>
+              <th class="capitalize">{{ 'standard.lmin' | ct:'Lmin' }}</th>
+              <th class="capitalize">{{ 'standard.lmax' | ct:'Lmax' }}</th>
+              <th class="capitalize">{{ 'standard.reference' | ct:'Referencia' }}</th>
+              <th class="capitalize">{{ 'standard.description' | ct:'Descripcion' }}</th>
+              <th class="capitalize">{{ 'standard.actions' | ct:'Acciones' }}</th>
           </tr>
       </ng-template>
       <ng-template pTemplate="body" let-parameter>
@@ -70,7 +70,7 @@
                   <p-button severity="secondary" rounded="true" icon="fas fa-pencil" (onClick)="openEditModal(parameter)"></p-button>
                   </div>
                   <div>
-                  <p-button severity="secondary" rounded="true" icon="fas fa-trash" (onClick)="deleteParameter(parameter)"></p-button>
+                  <p-button severity="secondary" rounded="true" icon="fas fa-trash" (onClick)="deleteStandard(parameter)"></p-button>
                   </div>
                 </div>
               </td>
@@ -79,8 +79,8 @@
   </p-table>
 </div>
 
-<app-modal-parameter-form
-  #parameterForm
+<app-modal-standard-form
+  #standardForm
   [defaultRegulationUid]="selectedRegulationUid()"
-  (saved)="onParameterSaved()"
-></app-modal-parameter-form>
+  (saved)="onStandardSaved()"
+></app-modal-standard-form>

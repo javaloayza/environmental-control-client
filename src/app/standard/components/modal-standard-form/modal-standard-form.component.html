@@ -2,16 +2,16 @@
     <ng-template #header>
         <div class="font-semibold text-xl">
           @if(mode === 'Create'){
-            {{ 'parameter.create' | ct:'Crear Parametro' }}
+            {{ 'standard.create' | ct:'Crear Parametro' }}
           } @else {
-            {{ 'parameter.update' | ct:'Editar Parametro' }}
+            {{ 'standard.update' | ct:'Editar Parametro' }}
           }
         </div>
     </ng-template>
 
-    <form [formGroup]="parameterForm" class="flex flex-col gap-4">
+    <form [formGroup]="standardForm" class="flex flex-col gap-4">
         <div class="flex flex-col gap-2">
-            <label for="uidRegulation" class="font-semibold">{{ 'parameter.regulation' | ct:'Regulacion' }}</label>
+            <label for="uidRegulation" class="font-semibold">{{ 'standard.regulation' | ct:'Regulacion' }}</label>
             <p-select
                 id="uidRegulation"
                 [options]="regulations()"
@@ -20,68 +20,68 @@
                 optionValue="uidRegulation"
                 placeholder="Seleccione una regulacion"
                 class="w-full"
-                [class.ng-invalid]="parameterForm.get('uidRegulation')?.invalid && parameterForm.get('uidRegulation')?.touched"
+                [class.ng-invalid]="standardForm.get('uidRegulation')?.invalid && standardForm.get('uidRegulation')?.touched"
             />
         </div>
 
         <div class="flex flex-col gap-2">
-            <label for="name" class="font-semibold">{{ 'parameter.name' | ct:'Nombre' }}</label>
+            <label for="name" class="font-semibold">{{ 'standard.name' | ct:'Nombre' }}</label>
             <input
                 pInputText
                 id="name"
                 class="flex-auto"
                 autocomplete="off"
                 formControlName="name"
-                [class.ng-invalid]="parameterForm.get('name')?.invalid && parameterForm.get('name')?.touched"
+                [class.ng-invalid]="standardForm.get('name')?.invalid && standardForm.get('name')?.touched"
             />
         </div>
 
         <div class="grid">
             <div class="col-6 flex flex-col gap-2">
-                <label for="lmin" class="font-semibold">{{ 'parameter.lmin' | ct:'Lmin' }}</label>
+                <label for="lmin" class="font-semibold">{{ 'standard.lmin' | ct:'Lmin' }}</label>
                 <input
                     pInputText
                     id="lmin"
                     type="number"
                     class="flex-auto"
                     formControlName="lmin"
-                    [class.ng-invalid]="parameterForm.get('lmin')?.invalid && parameterForm.get('lmin')?.touched"
+                    [class.ng-invalid]="standardForm.get('lmin')?.invalid && standardForm.get('lmin')?.touched"
                 />
             </div>
             <div class="col-6 flex flex-col gap-2">
-                <label for="lmax" class="font-semibold">{{ 'parameter.lmax' | ct:'Lmax' }}</label>
+                <label for="lmax" class="font-semibold">{{ 'standard.lmax' | ct:'Lmax' }}</label>
                 <input
                     pInputText
                     id="lmax"
                     type="number"
                     class="flex-auto"
                     formControlName="lmax"
-                    [class.ng-invalid]="parameterForm.get('lmax')?.invalid && parameterForm.get('lmax')?.touched"
+                    [class.ng-invalid]="standardForm.get('lmax')?.invalid && standardForm.get('lmax')?.touched"
                 />
             </div>
         </div>
 
         <div class="flex flex-col gap-2">
-            <label for="reference" class="font-semibold">{{ 'parameter.reference' | ct:'Referencia' }}</label>
+            <label for="reference" class="font-semibold">{{ 'standard.reference' | ct:'Referencia' }}</label>
             <input
                 pInputText
                 id="reference"
                 class="flex-auto"
                 autocomplete="off"
                 formControlName="reference"
-                [class.ng-invalid]="parameterForm.get('reference')?.invalid && parameterForm.get('reference')?.touched"
+                [class.ng-invalid]="standardForm.get('reference')?.invalid && standardForm.get('reference')?.touched"
             />
         </div>
 
         <div class="flex flex-col gap-2">
-            <label for="description" class="font-semibold">{{ 'parameter.description' | ct:'Descripcion' }}</label>
+            <label for="description" class="font-semibold">{{ 'standard.description' | ct:'Descripcion' }}</label>
             <input
                 pInputText
                 id="description"
                 class="flex-auto"
                 autocomplete="off"
                 formControlName="description"
-                [class.ng-invalid]="parameterForm.get('description')?.invalid && parameterForm.get('description')?.touched"
+                [class.ng-invalid]="standardForm.get('description')?.invalid && standardForm.get('description')?.touched"
             />
         </div>
     </form>
@@ -97,8 +97,8 @@
             label="Save"
             [outlined]="true"
             [loading]="loading"
-            [disabled]="!parameterForm.valid || loading"
-            (click)="saveParameter()"
+            [disabled]="!standardForm.valid || loading"
+            (click)="saveStandard()"
         />
     </ng-template>
 </p-dialog>
