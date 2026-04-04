@@ -8,6 +8,7 @@ import { LOCATION_STRING_ROUTES } from './location/constants/location-routes';
 import { MONITORING_TYPE_STRING_ROUTES } from './monitoring-type/constants/monitoring-type-routes';
 import { SPECIFIC_LOCATION_STRING_ROUTES } from './specific-location/constants/specific-location-routes';
 import { STANDARD_STRING_ROUTES } from './standard/constants/standard-routes';
+import { PARAMETER_STRING_ROUTES } from './parameter/constants/parameter-routes';
 
 export const APP_ROUTES: Routes = [
   {
@@ -50,6 +51,10 @@ export const APP_ROUTES: Routes = [
       {
         path: STANDARD_STRING_ROUTES.ROOT,
         loadChildren: () => import('./standard/standard.routes').then(m => m.STANDARD_ROUTES)
+      },
+      {
+        path: PARAMETER_STRING_ROUTES.ROOT,
+        loadChildren: () => import('./parameter/parameter.routes').then(m => m.PARAMETER_ROUTES)
       },
     ]
   },

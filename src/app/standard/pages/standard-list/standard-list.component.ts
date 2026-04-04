@@ -6,6 +6,7 @@ import { InputIcon } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { SelectModule } from 'primeng/select';
+import { TooltipModule } from 'primeng/tooltip';
 import { FormsModule } from '@angular/forms';
 import { ModalStandardFormComponent } from 'app/standard/components';
 import { NotificationService } from '@core/services';
@@ -29,6 +30,7 @@ import { customTextUtil } from '@shared/utils';
     InputIcon,
     InputTextModule,
     SelectModule,
+    TooltipModule,
     FormsModule,
     ModalStandardFormComponent,
     TextPipe
@@ -121,9 +123,13 @@ export class StandardListComponent implements OnInit {
   }
 
   private async initializeSelections(): Promise<void> {
-    const storedMonitoringType = await (await import('@core/services')).SecureStorageService.prototype.getItem?.call?.(null as any) || null;
+    // TODO: Restaurar lógica de storage si es necesario
+    // const storedMonitoringType = await (await import('@core/services')).SecureStorageService.prototype.getItem?.call?.(null as any) || null;
     // Fallback: reuse logic from parameter component via storageService in the template; for brevity we'll rely on existing behavior when module loaded
     // The modal/list interaction will work similarly to parameter implementation.
+    
+    // Initialize any stored selections if needed
+    // For now, leave empty as the dropdowns will be populated on component load
   }
 
   async fetchStandards() {
@@ -146,10 +152,20 @@ export class StandardListComponent implements OnInit {
     this.searchTerm.set((event.target as HTMLInputElement).value);
   }
 
+  onMonitoringTypeChange(value: string | null) {
+    this.selectedMonitoringTypeUid.set(value);
+    this.selectedRegulationUid.set(null);
+  }
+
+  onRegulationChange(value: string | null) {
+    this.selectedRegulationUid.set(value);
+    this.fetchStandards();
+  }
+
   openCreateModal() {
     this.standardForm.showModal();
   }
-
+s
   openEditModal(parameter: Standard) {
     this.standardForm.showModal(parameter);
   }
